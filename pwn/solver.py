@@ -5,6 +5,12 @@ remote_name = "localhost"
 remote_port = 9001
 libc_name = "libc.so.6"
 
+context.terminal = ["tmux", "splitw", "-h"]
+
+REMOTE = 0
+LOCAL = 1
+DEBUG = 2
+
 
 def conn(exploit_target=0):
     if exploit_target == 0:
@@ -25,7 +31,7 @@ def conn(exploit_target=0):
     return remote(remote_name, remote_port)
 
 
-io = conn(exploit_target=0)
+io = conn(exploit_target=LOCAL)
 
 elf = ELF(binary_name)
 libc = ELF(libc_name)
