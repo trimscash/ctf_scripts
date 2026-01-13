@@ -34,7 +34,7 @@ def conn(exploit_target=0):
 io = conn(exploit_target=LOCAL)
 
 elf = ELF(binary_name)
-libc = ELF(libc_name)
+# libc = ELF(libc_name)
 
 # rop = ROP(elf)
 # pop_rdi = rop.find_gadget(["pop rdi", "ret"]).address
@@ -48,10 +48,15 @@ io.sendlineafter(b">", payload)
 
 io.interactive()
 
+# def exploit(io: remote | process)
+#     try:
+#         return 0
+#     except:
+#         return 1
 
 # while True:
 #     io = conn(exploit_target=0)
-#     if exploit():
+#     if exploit(io):
 #         io.close()
 #         continue
 #     io.interactive()
