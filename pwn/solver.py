@@ -33,7 +33,10 @@ def conn(exploit_target=0):
     return remote(remote_name, remote_port)
 
 
-io = conn(exploit_target=TARGET_ARGS[sys.argv[1][1:]])
+exploit_target = (
+    TARGET_ARGS[sys.argv[1][1:]] if len(sys.argv) > 1 else TARGET_ARGS["LOCAL"]
+)
+io = conn(exploit_target=exploit_target)
 
 elf = ELF(binary_name)
 # libc = ELF(libc_name)
