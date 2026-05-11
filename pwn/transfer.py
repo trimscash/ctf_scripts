@@ -8,7 +8,7 @@ def run(cmd):
     io.recvline()
 
 
-with open("./root/exploit", "rb") as f:
+with open("./exploit", "rb") as f:
     payload = base64.b64encode(f.read()).decode()
 
 HOST = "localhost"
