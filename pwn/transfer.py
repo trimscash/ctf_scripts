@@ -13,7 +13,7 @@ with open("./exploit", "rb") as f:
 
 HOST = "localhost"
 PORT = 1234
-# io = remote("HOST", PORT)  # remote
+# io = remote(HOST, PORT)  # remote
 io = process("./run.sh")
 
 run("cd /tmp")
@@ -27,5 +27,6 @@ for i in range(0, len(payload), 512):
 run("base64 -d b64exp > exploit")
 run("rm b64exp")
 run("chmod +x exploit")
+run("./exploit")
 
 io.interactive()
